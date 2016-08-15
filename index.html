@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Elm Ports</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+    var app = Elm.Main.embed(document.body);
+
+    app.ports.output.subscribe(function (id) {
+        $("#"+id).datepicker();
+        $("#"+id).change(function(e){
+          app.ports.input.send([id, e.target.value]);
+        });
+    });
+</script>
+</body>
+</html>
