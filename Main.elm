@@ -1,12 +1,8 @@
 port module Main exposing (..)
 
-import String
-import Debug
-import Cmd.Extra exposing (message)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode as JsonDecode
 import Html.App as App
 import Calendar
 
@@ -62,7 +58,7 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case (Debug.log "MESSAGE: " msg) of
+    case msg of
         First msg' ->
             let
                 ( model', cmd' ) =
@@ -85,17 +81,17 @@ update msg model =
 init : ( Model, Cmd Msg )
 init =
     let
-        calc1 =
+        ( model1, cmd1 ) =
             Calendar.init "first"
 
-        calc2 =
+        ( model2, cmd2 ) =
             Calendar.init "second"
     in
-        ( { first = fst calc1
-          , second = fst calc2
+        ( { first = model1
+          , second = model2
           }
         , Cmd.batch
-            [ Cmd.map First (snd calc1)
-            , Cmd.map Second (snd calc2)
+            [ Cmd.map First cmd1
+            , Cmd.map Second cmd2
             ]
         )

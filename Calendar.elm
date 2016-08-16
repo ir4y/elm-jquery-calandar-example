@@ -1,26 +1,23 @@
 port module Calendar exposing (..)
 
-import String
-import Debug
 import Cmd.Extra exposing (message)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode as JsonDecode
 
 
 -- SUBSCRIPTIONS
 
 
-port output : String -> Cmd msg
+port initCalendarWidget : String -> Cmd msg
 
 
-port input : (( String, String ) -> msg) -> Sub msg
+port setCalandarValue : (( String, String ) -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    input SetValue
+    setCalandarValue SetCalandarValue
 
 
 
@@ -53,21 +50,21 @@ view model =
 
 
 type Msg
-    = Ask
-    | SetValue ( String, String )
+    = InitCalendarWidget
+    | SetCalandarValue ( String, String )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case (Debug.log "MESSAGE: " msg) of
-        SetValue ( id, data ) ->
+    case msg of
+        SetCalandarValue ( id, data ) ->
             if model.id == id then
                 ( { model | data = data }, Cmd.none )
             else
                 ( model, Cmd.none )
 
-        Ask ->
-            ( model, output model.id )
+        InitCalendarWidget ->
+            ( model, initCalendarWidget model.id )
 
 
 
@@ -76,4 +73,4 @@ update msg model =
 
 init : String -> ( Model, Cmd Msg )
 init id =
-    ( { id = id, data = "" }, message Ask )
+    ( { id = id, data = "" }, message InitCalendarWidget )

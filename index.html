@@ -14,10 +14,10 @@
 <script>
     var app = Elm.Main.embed(document.body);
 
-    app.ports.output.subscribe(function (id) {
+    app.ports.initCalendarWidget.subscribe(function (id) {
         $("#"+id).datepicker();
         $("#"+id).change(function(e){
-          app.ports.input.send([id, e.target.value]);
+          app.ports.setCalandarValue.send([id, e.target.value]);
         });
     });
 </script>
